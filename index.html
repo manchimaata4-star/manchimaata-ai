@@ -1,87 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ManchiMaata AI</title>
+    if (data.error) {
+      document.getElementById("result").textContent = "API Error: " + data.error.message;
+      return;
+    }
 
-<style>
+    if (data.candidates && data.candidates.length > 0) {
+      const generatedText = data.candidates[0].content.parts[0].text;
+      
+      // Use innerText or preserve whitespace if placing inside a standard div
+      // Alternatively, using a <pre> or <textarea> element is best for markdown output
+      document.getElementById("result").innerText = generatedText; 
+    } else {
+      document.getElementById("result").textContent = "No content was generated. Please check your prompt or try again.";
+    }
 
-body{
-background:#111827;
-font-family:Arial,sans-serif;
-color:white;
-padding:20px;
+  } catch (error) {
+    console.error("Fetch Request Failed:", error);
+    document.getElementById("result").textContent = "Network or Execution Error: " + error.message;
+  }
 }
-
-.container{
-max-width:900px;
-margin:auto;
-}
-
-h1{
-text-align:center;
-color:#38bdf8;
-margin-bottom:20px;
-}
-
-input{
-width:100%;
-padding:15px;
-margin:10px 0;
-font-size:18px;
-border:none;
-border-radius:10px;
-}
-
-button{
-width:100%;
-padding:15px;
-font-size:20px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:10px;
-cursor:pointer;
-}
-
-button:hover{
-background:#1d4ed8;
-}
-
-#result{
-margin-top:20px;
-padding:20px;
-background:#1e293b;
-border-radius:10px;
-white-space:pre-wrap;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>ManchiMaata AI</h1>
-
-<input
-id="apikey"
-type="password"
-placeholder="Enter Gemini API Key">
-
-<input
-id="topic"
-placeholder="Enter Topic">
-
-<button onclick="generate()">
-Generate
-</button>
-
-<div id="result">
-Ready...
-</div>
-
-<script>
