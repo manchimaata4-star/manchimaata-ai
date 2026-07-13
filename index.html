@@ -1,10 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>ManchiMaata AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManchiMaata AI</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#111827;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:#00ff99;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#00cc66;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#00994d;
+}
+
+#output{
+margin-top:20px;
+white-space:pre-wrap;
+background:#222;
+padding:15px;
+border-radius:10px;
+}
+</style>
+
 </head>
+
 <body>
-  <h1>Welcome to ManchiMaata AI</h1>
-  <p>My website is live.</p>
+
+<div class="container">
+
+<h1>ManchiMaata AI</h1>
+
+<input id="apikey" placeholder="Enter Gemini API Key">
+
+<input id="topic" placeholder="Enter Topic">
+
+<button onclick="generate()">Generate</button>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+
+async function generate(){
+
+let apiKey=document.getElementById("apikey").value;
+
+let topic=document.getElementById("topic").value;
+
+document.getElementById("output").innerHTML="Generating...";
+
+const prompt=`
+Create Telugu YouTube Content about:
+${topic}
+
+Give:
+
+1. Powerful Hook
+
+2. 60 Second Script
+
+3. SEO Title
+
+4. Description
+
+5. 15 Hashtags
+
+6. Thumbnail Prompt
+
+7. AI Video Prompt
+
+8. Voice Script
+
+9. Pin Comment
+
+10. 10 Comment Replies
+`;
+
+const url="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+apiKey;
+
+const response=await fetch(url,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+contents:[
+{
+parts:[
+{
+text:prompt
+}
+]
+}
+]
+})
+});
+
+const data=await response.json();
+
+document.getElementById("output").innerHTML=
+data.candidates[0].content.parts[0].text;
+
+}
+
+</script>
+
 </body>
 </html>
